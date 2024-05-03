@@ -33,10 +33,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shadow.taller01_test_1.AddToListActivity
+import com.shadow.taller01_test_1.EditActivity
 import com.shadow.taller01_test_1.MainActivity
 import com.shadow.taller01_test_1.model.ObjectClass
 import com.shadow.taller01_test_1.ui.components.ToDoCard
 import com.shadow.taller01_test_1.viewmodel.DataViewModel
+import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +47,6 @@ fun HomeScreen(context: Context) {
     val listShared: MutableState<MutableList<ObjectClass>> =
         remember { mutableStateOf(mutableListOf()) }
     listShared.value = viewModel.getData()
-    //val context = LocalContext.current // Obtén el contexto local
     val intentMain = Intent(context, MainActivity::class.java)
     val intentAdd = Intent(context, AddToListActivity::class.java)
     Scaffold(
@@ -108,14 +109,15 @@ fun HomeScreen(context: Context) {
         LazyColumn(
             modifier = Modifier.padding(innerPadding),
         ) {
-            itemsIndexed(listShared.value) { _, item ->
+            itemsIndexed(listShared.value) { index, item ->
                 ToDoCard(
                     title = item.title,
                     description = item.description,
                     start = item.startDate,
                     end = item.endDate,
                     onClick = {
-                        val intent = Intent(context, AddToListActivity::class.java)
+                        val intent = Intent(context, EditActivity::class.java)
+                        intent.putExtra("index", index)
                         context.startActivity(intent)
                     }
                 )

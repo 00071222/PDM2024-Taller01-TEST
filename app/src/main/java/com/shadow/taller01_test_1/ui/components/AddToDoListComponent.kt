@@ -89,5 +89,5 @@ fun AddToDoListComponent(onClick: ()-> Unit) {
 @Preview
 @Composable
 private fun ComponentPreview() {
-    AddToDoListComponent({})
+    AddToDoListComponent{}
 }

@@ -23,12 +23,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".AddToListActivity"
             android:exported="true"
             android:theme="@style/Theme.Taller01TEST1">
         </activity>
         <activity
-            android:name=".AddToListActivity"
+            android:name=".EditActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Taller01TEST1">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.Taller01TEST1">
         </activity>
