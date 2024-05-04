@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +36,7 @@ import java.time.ZoneId
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddToDoListComponent(onClick: () -> Unit,  context: Context) {
+fun AddToDoListComponent(onClick: () -> Unit, context: Context) {
     val textFieldTitle: MutableState<String> = remember { mutableStateOf("") }
     val textFieldDescription: MutableState<String> = remember { mutableStateOf("") }
     val viewModel = DataViewModel()
@@ -49,7 +48,6 @@ fun AddToDoListComponent(onClick: () -> Unit,  context: Context) {
     var showCalendarTwo by remember {
         mutableStateOf(false)
     }
-    var isButtonEnabled by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -130,10 +128,9 @@ fun AddToDoListComponent(onClick: () -> Unit,  context: Context) {
             Text(text = "Date Two: $dateTwoX")
         }
         Spacer(modifier = Modifier.padding(8.dp))
-        //Validation of add button
-
         Button(
             onClick = {
+                //Validation of add
                 if (textFieldTitle.value.isNotBlank() &&
                     textFieldDescription.value.isNotBlank() &&
                     dateOneX.toString().isNotBlank() &&
@@ -148,12 +145,9 @@ fun AddToDoListComponent(onClick: () -> Unit,  context: Context) {
                     viewModel.addData(data)
                     onClick()
                 } else {
-                    Toast.makeText(context,"Hello",Toast.LENGTH_SHORT ).show()
+                    Toast.makeText(context, "Isn't Yet", Toast.LENGTH_SHORT).show()
                 }
-
-            },
-            //enabled = isButtonEnabled,
-        ) {
+            }) {
             Text(text = "Add")
         }
     }
