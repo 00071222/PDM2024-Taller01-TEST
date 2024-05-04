@@ -18,10 +18,10 @@ fun AddToDoListScreen(context: Context) {
             context.startActivity(Intent(context, MainActivity::class.java))
             (context as Activity)
         }
-        AddToDoListComponent {
+        AddToDoListComponent(onClick = {
             context.startActivity(Intent(context, MainActivity::class.java))
             (context as Activity)
-        }
+        }, context = context)
     }
 }
 
