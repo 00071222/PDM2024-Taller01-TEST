@@ -149,7 +149,7 @@ fun AddToDoListComponent(onClick: () -> Unit, context: Context) {
                     viewModel.addData(data)
                     onClick()
                 } else {
-                    Toast.makeText(context, "Isn't Yet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Isn't Yet, can't save empty data", Toast.LENGTH_SHORT).show()
                 }
             }) {
             Text(text = "Add")

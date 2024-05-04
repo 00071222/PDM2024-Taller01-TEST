@@ -2,18 +2,26 @@ package com.shadow.taller01_test_1.ui.components
 
 import android.app.Activity
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,13 +31,16 @@ import androidx.compose.ui.unit.dp
 import com.shadow.taller01_test_1.data.objectList
 import com.shadow.taller01_test_1.model.ObjectClass
 import com.shadow.taller01_test_1.viewmodel.DataViewModel
+import java.time.Instant
+import java.time.ZoneId
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditToDoListComponent(onClick: () -> Unit, context: Context) {
     if (context is Activity) {
+        //OLD data from Dummy
         val index = context.intent.getIntExtra("index", -1)
-
         val item = objectList.value.getOrNull(index)
         val oldData = ObjectClass(
             title = item?.title ?: "",
@@ -37,16 +48,21 @@ fun EditToDoListComponent(onClick: () -> Unit, context: Context) {
             startDate = item?.startDate ?: "",
             endDate = item?.endDate ?: ""
         )
+        //TextFields
         val textFieldTitle: MutableState<String> =
             remember { mutableStateOf(item?.title ?: "") }
         val textFieldDescription: MutableState<String> =
             remember { mutableStateOf(item?.description ?: "") }
-        val textFieldStartDate: MutableState<String> =
-            remember { mutableStateOf(item?.startDate ?: "") }
-        val textFieldEndDate: MutableState<String> =
-            remember { mutableStateOf(item?.endDate ?: "") }
         val viewModel = DataViewModel()
-
+        //Calendar
+        val stateOne = rememberDatePickerState()
+        val stateTwo = rememberDatePickerState()
+        var showCalendarOne by remember {
+            mutableStateOf(false)
+        }
+        var showCalendarTwo by remember {
+            mutableStateOf(false)
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,34 +89,83 @@ fun EditToDoListComponent(onClick: () -> Unit, context: Context) {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
             Spacer(modifier = Modifier.padding(8.dp))
-            TextField(
-                value = textFieldStartDate.value,
-                onValueChange = { textFieldStartDate.value = it },
-                placeholder = {
-                    Text(text = "Insert first date")
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            )
+            if (showCalendarOne) {
+                DatePickerDialog(
+                    onDismissRequest = { showCalendarOne = false },
+                    confirmButton = {
+                        Button(onClick = { showCalendarOne = false }) {
+                            Text(text = "Confirm")
+                        }
+                    },
+                    dismissButton = {
+                        OutlinedButton(onClick = { showCalendarOne = false }) {
+                            Text(text = "Cancel")
+                        }
+                    }) {
+                    DatePicker(state = stateOne)
+                }
+            }
+            val dateOne = stateOne.selectedDateMillis
+            var dateOneX: String? = item?.startDate ?: ""
+            dateOne?.let {
+                val localDate = Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC")).toLocalDate()
+                dateOneX = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
+            }
+            TextField(value = dateOneX.toString(), onValueChange = {}, enabled = false, placeholder = {
+                Text(text = "dd/mm/yyyy")
+            })
+            OutlinedButton(onClick = { showCalendarOne = true }) {
+                Text(text = "Select first date")
+            }
             Spacer(modifier = Modifier.padding(8.dp))
-            TextField(
-                value = textFieldEndDate.value,
-                onValueChange = { textFieldEndDate.value = it },
-                placeholder = { Text(text = "Insert last date") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            )
+            if (showCalendarTwo) {
+                DatePickerDialog(
+                    onDismissRequest = { showCalendarTwo = false },
+                    confirmButton = {
+                        Button(onClick = { showCalendarTwo = false }) {
+                            Text(text = "Confirm")
+                        }
+                    },
+                    dismissButton = {
+                        OutlinedButton(onClick = { showCalendarTwo = false }) {
+                            Text(text = "Cancel")
+                        }
+                    }) {
+                    DatePicker(state = stateTwo)
+                }
+            }
+            val dateTwo = stateTwo.selectedDateMillis
+            var dateTwoX: String? = item?.endDate ?: ""
+            dateTwo?.let {
+                val localDate = Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC")).toLocalDate()
+                dateTwoX = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
+            }
+            TextField(value = dateTwoX.toString(), onValueChange = {}, enabled = false, placeholder = {
+                Text(text = "dd/mm/yyyy")
+            })
+            OutlinedButton(onClick = { showCalendarTwo = true }) {
+                Text(text = "Select second date")
+            }
             Spacer(modifier = Modifier.padding(8.dp))
             Button(
                 onClick = {
-                    val newData = ObjectClass(
-                        title = textFieldTitle.value,
-                        description = textFieldDescription.value,
-                        startDate = textFieldStartDate.value,
-                        endDate = textFieldEndDate.value
-                    )
-                    viewModel.updateData(oldData, newData)
-                    onClick()
+                    //Validation of add
+                    if (textFieldTitle.value.isNotBlank() &&
+                        textFieldDescription.value.isNotBlank() &&
+                        dateOneX.toString().isNotBlank() &&
+                        dateTwoX.toString().isNotBlank()
+                    ) {
+                        val newData = ObjectClass(
+                            title = textFieldTitle.value,
+                            description = textFieldDescription.value,
+                            startDate = dateOneX.toString(),
+                            endDate = dateTwoX.toString()
+                        )
+                        viewModel.updateData(oldData,newData)
+                        onClick()
+                    } else {
+                        Toast.makeText(context, "Isn't Yet, can't save empty data", Toast.LENGTH_SHORT).show()
+                    }
                 }) {
                 Text(text = "Update")
             }
