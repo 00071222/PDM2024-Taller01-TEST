@@ -12,21 +12,21 @@ import com.shadow.taller01_test_1.ui.components.AddToDoListComponent
 import com.shadow.taller01_test_1.ui.components.NavToMainComponent
 
 @Composable
-fun AddToDoListScreen(context: Context){
+fun AddToDoListScreen(context: Context) {
     Column {
         NavToMainComponent {
             context.startActivity(Intent(context, MainActivity::class.java))
             (context as Activity)
         }
-        AddToDoListComponent{
+        AddToDoListComponent {
             context.startActivity(Intent(context, MainActivity::class.java))
-                (context as Activity)
+            (context as Activity)
         }
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
-private fun ScreenPreview(){
+private fun ScreenPreview() {
     AddToDoListScreen(context = LocalContext.current)
 }

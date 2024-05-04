@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ToDoCard(title: String, description: String, start: String, end: String, onClick: ()-> Unit) {
+fun ToDoCard(title: String, description: String, start: String, end: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,8 +47,8 @@ fun ToDoCard(title: String, description: String, start: String, end: String, onC
         )
         Button(
             onClick =
-                    onClick
-            ) {
+            onClick
+        ) {
             Icon(Icons.Default.Edit, contentDescription = "Edit")
         }
 

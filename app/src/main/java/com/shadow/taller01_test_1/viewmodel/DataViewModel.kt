@@ -31,6 +31,7 @@ class DataViewModel : ViewModel() {
             }
         }
     }
+
     fun deleteAllData() {
         viewModelScope.launch {
             objectList.value.clear()

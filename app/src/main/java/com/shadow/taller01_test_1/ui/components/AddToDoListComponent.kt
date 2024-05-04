@@ -21,7 +21,7 @@ import com.shadow.taller01_test_1.model.ObjectClass
 import com.shadow.taller01_test_1.viewmodel.DataViewModel
 
 @Composable
-fun AddToDoListComponent(onClick: ()-> Unit) {
+fun AddToDoListComponent(onClick: () -> Unit) {
     val textFieldTitle: MutableState<String> = remember { mutableStateOf("") }
     val textFieldDescription: MutableState<String> = remember { mutableStateOf("") }
     val textFieldStartDate: MutableState<String> = remember { mutableStateOf("") }
@@ -30,7 +30,8 @@ fun AddToDoListComponent(onClick: ()-> Unit) {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth().padding(start = 16.dp, end = 16.dp),
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.padding(8.dp))
@@ -65,22 +66,27 @@ fun AddToDoListComponent(onClick: ()-> Unit) {
         Spacer(modifier = Modifier.padding(8.dp))
         TextField(
             value = textFieldEndDate.value,
-            onValueChange = { textFieldEndDate.value = it},
-            placeholder = { Text(text = "Insert last date")},
+            onValueChange = { textFieldEndDate.value = it },
+            placeholder = { Text(text = "Insert last date") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
             onClick = {
-                val data = ObjectClass(title = textFieldTitle.value, description = textFieldDescription.value, startDate = textFieldStartDate.value, endDate = textFieldEndDate.value)
+                val data = ObjectClass(
+                    title = textFieldTitle.value,
+                    description = textFieldDescription.value,
+                    startDate = textFieldStartDate.value,
+                    endDate = textFieldEndDate.value
+                )
                 viewModel.addData(data)
                 textFieldTitle.value = ""
                 textFieldDescription.value = ""
                 textFieldStartDate.value = ""
                 textFieldEndDate.value = ""
                 onClick()
-            })  {
+            }) {
             Text(text = "Add")
         }
     }
@@ -89,5 +95,5 @@ fun AddToDoListComponent(onClick: ()-> Unit) {
 @Preview
 @Composable
 private fun ComponentPreview() {
-    AddToDoListComponent{}
+    AddToDoListComponent {}
 }
