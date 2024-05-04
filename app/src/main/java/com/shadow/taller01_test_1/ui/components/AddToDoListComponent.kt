@@ -74,9 +74,6 @@ fun AddToDoListComponent(onClick: () -> Unit, context: Context) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
         Spacer(modifier = Modifier.padding(8.dp))
-        OutlinedButton(onClick = { showCalendarOne = true }) {
-            Text(text = "Select first date")
-        }
         if (showCalendarOne) {
             DatePickerDialog(
                 onDismissRequest = { showCalendarOne = false },
@@ -98,12 +95,14 @@ fun AddToDoListComponent(onClick: () -> Unit, context: Context) {
         dateOne?.let {
             val localDate = Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC")).toLocalDate()
             dateOneX = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
-            Text(text = "Date ONE: $dateOneX")
+        }
+        TextField(value = dateOneX.toString(), onValueChange = {}, enabled = false, placeholder = {
+            Text(text = "dd/mm/yyyy")
+        })
+        OutlinedButton(onClick = { showCalendarOne = true }) {
+            Text(text = "Select first date")
         }
         Spacer(modifier = Modifier.padding(8.dp))
-        OutlinedButton(onClick = { showCalendarTwo = true }) {
-            Text(text = "Select second date")
-        }
         if (showCalendarTwo) {
             DatePickerDialog(
                 onDismissRequest = { showCalendarTwo = false },
@@ -125,7 +124,12 @@ fun AddToDoListComponent(onClick: () -> Unit, context: Context) {
         dateTwo?.let {
             val localDate = Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC")).toLocalDate()
             dateTwoX = "${localDate.dayOfMonth}/${localDate.monthValue}/${localDate.year}"
-            Text(text = "Date Two: $dateTwoX")
+        }
+        TextField(value = dateTwoX.toString(), onValueChange = {}, enabled = false, placeholder = {
+            Text(text = "dd/mm/yyyy")
+        })
+        OutlinedButton(onClick = { showCalendarTwo = true }) {
+            Text(text = "Select second date")
         }
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
